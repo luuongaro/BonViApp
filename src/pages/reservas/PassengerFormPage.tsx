@@ -71,15 +71,6 @@ const PageHeader = styled(Box)(({ theme }) => ({
   },
 }));
 
-const AirplaneIcon = styled(AirplanemodeActiveIcon)(({ theme }) => ({
-  color: theme.palette.primary.main,
-  transform: 'rotate(45deg)',
-  position: 'absolute',
-  fontSize: '4rem',
-  opacity: 0.2,
-  zIndex: 0,
-}));
-
 interface Passenger {
   id: string;
   documentType: string;
@@ -126,24 +117,6 @@ const PassengerFormPage = () => {
   const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [currentPassenger, setCurrentPassenger] = useState<Passenger | null>(null);
-  const [newPassenger, setNewPassenger] = useState<Partial<Passenger>>({
-    documentType: '',
-    documentNumber: '',
-    documentExpiryDate: '',
-    hasVisa: false,
-    visaNumber: '',
-    firstName: '',
-    lastName: '',
-    birthDate: '',
-    nationality: '',
-    email: '',
-    phone: '',
-    gender: '',
-    address: '',
-    emergencyContact: '',
-    emergencyPhone: '',
-    specialNeeds: '',
-  });
 
   useEffect(() => {
     if (reservationId) {
@@ -270,101 +243,6 @@ const PassengerFormPage = () => {
       alert('Pasajero agregado correctamente a la reserva');
     } catch (error) {
       console.error('Error al agregar pasajero:', error);
-      alert('Error al agregar el pasajero. Por favor, intente nuevamente.');
-    }
-  };
-
-  const handleAddNewPassenger = () => {
-    try {
-      // Validar campos requeridos
-      if (!newPassenger.documentType || !newPassenger.documentNumber || !newPassenger.firstName || !newPassenger.lastName) {
-        alert('Por favor complete los campos obligatorios: Tipo de documento, Número de documento, Nombre y Apellido');
-        return;
-      }
-
-      // Generar ID único para el nuevo pasajero
-      const passengerId = `${newPassenger.documentType}_${newPassenger.documentNumber}`;
-
-      // Verificar si ya existe el pasajero
-      const passengerExists = passengers.some(p => p.id === passengerId);
-      if (passengerExists) {
-        alert('Ya existe un pasajero con este documento');
-        return;
-      }
-
-      // Crear el nuevo pasajero con todos los campos
-      const newPassengerData: Passenger = {
-        id: passengerId,
-        documentType: newPassenger.documentType,
-        documentNumber: newPassenger.documentNumber,
-        documentExpiryDate: newPassenger.documentExpiryDate || '',
-        hasVisa: newPassenger.hasVisa || false,
-        visaNumber: newPassenger.visaNumber || '',
-        firstName: newPassenger.firstName,
-        lastName: newPassenger.lastName,
-        birthDate: newPassenger.birthDate || '',
-        nationality: newPassenger.nationality || '',
-        email: newPassenger.email || '',
-        phone: newPassenger.phone || '',
-        gender: newPassenger.gender || '',
-        address: newPassenger.address || '',
-        emergencyContact: newPassenger.emergencyContact || '',
-        emergencyPhone: newPassenger.emergencyPhone || '',
-        specialNeeds: newPassenger.specialNeeds || '',
-      };
-
-      // Actualizar la lista de pasajeros
-      const updatedPassengers = [...passengers, newPassengerData];
-      setPassengers(updatedPassengers);
-
-      // Actualizar la reserva en localStorage
-      if (reservationId) {
-        const savedReservationsStr = localStorage.getItem('reservations');
-        if (savedReservationsStr) {
-          const savedReservations = JSON.parse(savedReservationsStr);
-          const updatedReservations = savedReservations.map((r: Reservation) => {
-            if (r.id === reservationId) {
-              return {
-                ...r,
-                passengers: updatedPassengers
-              };
-            }
-            return r;
-          });
-          localStorage.setItem('reservations', JSON.stringify(updatedReservations));
-        }
-      }
-
-      // Guardar el pasajero en la base de datos de pasajeros
-      const savedPassengersStr = localStorage.getItem('passengers');
-      const savedPassengers = savedPassengersStr ? JSON.parse(savedPassengersStr) : [];
-      const updatedSavedPassengers = [...savedPassengers, newPassengerData];
-      localStorage.setItem('passengers', JSON.stringify(updatedSavedPassengers));
-
-      // Limpiar el formulario
-      setNewPassenger({
-        documentType: '',
-        documentNumber: '',
-        documentExpiryDate: '',
-        hasVisa: false,
-        visaNumber: '',
-        firstName: '',
-        lastName: '',
-        birthDate: '',
-        nationality: '',
-        email: '',
-        phone: '',
-        gender: '',
-        address: '',
-        emergencyContact: '',
-        emergencyPhone: '',
-        specialNeeds: '',
-      });
-
-      setIsEditDialogOpen(false);
-      alert('Pasajero agregado correctamente');
-    } catch (error) {
-      console.error('Error al agregar nuevo pasajero:', error);
       alert('Error al agregar el pasajero. Por favor, intente nuevamente.');
     }
   };

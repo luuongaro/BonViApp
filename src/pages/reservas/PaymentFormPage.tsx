@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Container,
@@ -26,7 +26,6 @@ import {
   Chip,
   Divider,
   FormControlLabel,
-  Checkbox,
   Radio,
   RadioGroup,
   FormLabel,
@@ -228,13 +227,6 @@ const PaymentFormPage = () => {
     if (!reservation || !reservation.payments) return 0;
     return reservation.payments
       .filter(payment => payment.type === 'cobro')
-      .reduce((total, payment) => total + payment.amount, 0);
-  };
-
-  const calculateTotalPaidToProviders = () => {
-    if (!reservation || !reservation.payments) return 0;
-    return reservation.payments
-      .filter(payment => payment.type === 'pago')
       .reduce((total, payment) => total + payment.amount, 0);
   };
 

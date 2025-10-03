@@ -234,7 +234,7 @@ interface Reservation {
 }
 
 // Componentes decorativos
-const FloatingAirplane = styled(Box)(({ theme }) => ({
+const FloatingAirplane = styled(Box)(() => ({
   position: 'absolute',
   right: -10,
   top: -20,
@@ -244,7 +244,7 @@ const FloatingAirplane = styled(Box)(({ theme }) => ({
   pointerEvents: 'none',
 }));
 
-const BackgroundDecoration = styled(Box)(({ theme }) => ({
+const BackgroundDecoration = styled(Box)(() => ({
   position: 'absolute',
   right: 30,
   bottom: 20,
